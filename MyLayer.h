@@ -57,14 +57,14 @@ public:
 		triangle.reset(new Entity({p2}));
 		triangle->setPosition({0, 0, 0});
 
-		/*dirLight.reset(new DirectionalLight(
+		dirLight.reset(new DirectionalLight(
 				{
 						{0.1f, 0.1f, 0.1f},
 						{0, 1, 0},
 						{1, 0, 0}
 				},
 				{0, 0, -1}
-		));*/
+		));
 
 		pointLight.reset(new PointLight(
 				{
@@ -74,7 +74,7 @@ public:
 				},
 				{0, 0, 0},
 				{
-					0, 0, 1
+					1, 0.01f, 0.005f
 				}
 		));
 
@@ -112,7 +112,7 @@ public:
 		plane->draw(pers.getProjectionMatrix(), camera.getViewMatrix(), camera.getPosition(),
 		            dirLight, pointLight);
 		triangle->draw(pers.getProjectionMatrix(), camera.getViewMatrix(), camera.getPosition(),
-		               dirLight, pointLight);
+		               dirLight, nullptr);
 
 	}
 

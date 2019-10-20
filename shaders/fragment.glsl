@@ -8,6 +8,11 @@ struct Attenuation {
     float constant, linear, quadratic;
 };
 
+float calculateAttenuation(Attenuation attenuation, float distance) {
+    float distance2 = distance * distance;
+    return attenuation.constant + attenuation.linear * distance + attenuation.quadratic * distance2;
+}
+
 struct DirectionalLight {
     Light light;
     vec3 direction;
@@ -29,7 +34,6 @@ CalculatedLight calculateDirectionalLight(DirectionalLight dirLight, vec3 norm, 
     vec3 reflectDir = reflect(dirLight.direction, norm);
     vec3 viewDir = normalize(viewPos - fragPos);
     float spec = pow(max(dot(viewDir, reflectDir), 0), shininess);
-    // float attenuation= dirLight.attenuation.constant + dirLight.attenuation.linear * distance + dirLight.attenuation.quadratic * distance * distance;
     result.ambient = dirLight.light.ambient;
     result.diffuse = dirLight.light.diffuse * diff;
     result.specular = dirLight.light.specular * spec;
@@ -43,10 +47,11 @@ CalculatedLight calculatePointLight(PointLight pointLight, vec3 norm, vec3 fragP
     vec3 reflectDir = reflect(lightDir, norm);
     vec3 viewDir = normalize(viewPos - fragPos);
     float spec = pow(max(dot(viewDir, reflectDir), 0), shininess);
-    // float attenuation= dirLight.attenuation.constant + dirLight.attenuation.linear * distance + dirLight.attenuation.quadratic * distance * distance;
-    result.ambient = pointLight.light.ambient;
-    result.diffuse = pointLight.light.diffuse * diff;
-    result.specular = pointLight.light.specular * spec;
+    float distance = length(pointLight.position - fragPos);
+    float attenuation = calculateAttenuation(pointLight.attenuation, distance);
+    result.ambient = pointLight.light.ambient / attenuation;
+    result.diffuse = pointLight.light.diffuse * diff / attenuation;
+    result.specular = pointLight.light.specular * spec / attenuation;
     return result;
 }
 
@@ -84,5 +89,10 @@ void main () {
     diffuseChannel *= oColor;
     specularChannel *= oColor;
 
-    fragColor = vec4(ambientChannel + diffuseChannel + specularChannel, 1.0);
+    vec3 finalColor = ambientChannel + diffuseChannel + specularChannel;
+
+    if (finalColor == vec3(0.0))
+    finalColor = oColor;
+
+    fragColor = vec4(finalColor, 1.0);
 }
