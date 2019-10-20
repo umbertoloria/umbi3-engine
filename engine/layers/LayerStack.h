@@ -29,10 +29,16 @@ public:
 		}
 	}
 
+	void event (Event& event) {
+		// TODO: Ordine inverso
+		for (auto layer : layers) {
+			layer->event(event);
+		}
+	}
+
 	void detach () {
 		for (auto layer : layers) {
 			layer->detach();
 		}
 	}
-
 };

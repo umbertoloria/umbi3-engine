@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Picture.h"
+#include "lights/Light.h"
 
 class Entity {
 
@@ -40,7 +41,10 @@ public:
 		Entity::scale = scale;
 	}
 
-	void draw (const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix) {
+	void draw (const glm::mat4& projectionMatrix, const glm::mat4& viewMatrix,
+	           const glm::vec3& viewPosition,
+	           const std::shared_ptr<DirectionalLight>& dirLight,
+	           const std::shared_ptr<PointLight>& pointLight) {
 		glm::mat4 transformation{1.0};
 		transformation = glm::translate(transformation, position);
 		transformation = glm::rotate(transformation, glm::radians(rotation.y), {0, 1, 0});
@@ -48,7 +52,7 @@ public:
 		transformation = glm::rotate(transformation, glm::radians(rotation.z), {0, 0, 1});
 		transformation = glm::scale(transformation, scale);
 		for (Picture& picture : pictures) {
-			picture.draw(projectionMatrix, viewMatrix, transformation);
+			picture.draw(projectionMatrix, viewMatrix, transformation, viewPosition, dirLight, pointLight);
 		}
 	}
 

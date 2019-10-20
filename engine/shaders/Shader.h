@@ -50,6 +50,10 @@ public:
 		glUniform1f(getUniformLocation(name), v);
 	}
 
+	void setUniform3f (const std::string& name, const glm::vec3& vec) {
+		glUniform3f(getUniformLocation(name), vec.x, vec.y, vec.z);
+	}
+
 	void setUniform4f (const std::string& name, const glm::vec4& vec) {
 		glUniform4f(getUniformLocation(name), vec.x, vec.y, vec.z, vec.w);
 	}

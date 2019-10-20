@@ -2,11 +2,9 @@
 
 class KeyReleasedEvent : public Event {
 
-private:
-
-	int key;
-
 public:
+
+	const int key;
 
 	KeyReleasedEvent (int key) : key(key) {}
 

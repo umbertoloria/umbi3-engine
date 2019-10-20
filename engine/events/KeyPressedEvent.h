@@ -2,12 +2,10 @@
 
 class KeyPressedEvent : public Event {
 
-private:
-
-	int key;
-	bool pressing;
-
 public:
+
+	const int key;
+	const bool pressing;
 
 	KeyPressedEvent (int key, bool pressing) : key(key), pressing(pressing) {}
 

@@ -27,6 +27,7 @@ public:
 	void newEvent (Event& e) {
 //		std::cout << e.getMessage() << "\n";
 		// TODO: Propagare "e" a tutti i layer.
+		layerStack.event(e);
 	}
 
 	void add (Layer* layer) {

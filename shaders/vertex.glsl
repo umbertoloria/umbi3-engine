@@ -7,13 +7,17 @@ in vec3 aNormal;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 transformationMatrix;
+uniform vec3 viewPosition;
 
 out vec3 oColor;
 out vec3 oNormal;
+out vec3 oViewPosition;
+out vec3 oFragPosition;
 
 void main () {
-    gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(aPosition, 1.0);
-//    gl_Position = transformationMatrix * vec4(aPosition, 1.0);
     oColor = aColor;
-    oNormal = aNormal;
+    oNormal = mat3(transpose(inverse(transformationMatrix))) * aNormal;
+    oViewPosition = viewPosition;
+    oFragPosition = vec3(transformationMatrix * vec4(aPosition, 1.0));
+    gl_Position = projectionMatrix * viewMatrix * vec4(oFragPosition, 1.0);
 }
